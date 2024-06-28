@@ -3063,8 +3063,8 @@ def get_production(region, year):
 def get_ariadne_var(n, industry_demand, energy_totals, sector_ratios, industry_production, costs, region, year):
 
     var = pd.concat([
-        get_capacities(n, region),
-        get_capacity_additions_simple(n,region),
+        #get_capacities(n, region),
+        #get_capacity_additions_simple(n,region),
         #get_installed_capacities(n,region),
         #get_capacity_additions(n, region),
         #get_capacity_additions_nstat(n, region),

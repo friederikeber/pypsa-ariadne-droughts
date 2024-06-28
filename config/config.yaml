@@ -4,7 +4,7 @@
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: 20240627wind_limits
+  prefix: H2_ready_GT
   name:
   # - CurrentPolicies
   - KN2045_Bal_v4
@@ -18,7 +18,7 @@ run:
     enable: true
     file: config/scenarios.automated.yaml
   shared_resources: 
-    policy: base #stops recalculating
+    policy: true #stops recalculating
     exclude:
       - existing_heating.csv # specify files which should not be shared between scenarios
       - costs
@@ -64,8 +64,8 @@ scenario:
   sector_opts:
     - none
   planning_horizons:
-  - 2020
-  - 2025
+  # - 2020
+  # - 2025
   - 2030
   - 2035
   - 2040
@@ -269,30 +269,7 @@ sector:
     2040: 0.29
     2045: 0.36
     2050: 0.43
-  land_transport_fuel_cell_share:
-    2020: 0.05
-    2025: 0.05
-    2030: 0.05
-    2035: 0.05
-    2040: 0.05
-    2045: 0.05
-    2050: 0.05
-  land_transport_electric_share:
-    2020: 0.05
-    2025: 0.15
-    2030: 0.3
-    2035: 0.45
-    2040: 0.7
-    2045: 0.85
-    2050: 0.95
-  land_transport_ice_share:
-    2020: 0.9
-    2025: 0.8
-    2030: 0.65
-    2035: 0.5
-    2040: 0.25
-    2045: 0.1
-    2050: 0.0
+  hydrogen_turbine: true
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#industry
 industry:
@@ -405,6 +382,10 @@ electricity:
   powerplants_filter: (DateOut >= 2019 or DateOut != DateOut) and not (Country == "DE" and Set == "CHP")
   custom_powerplants: True
   custom_file: resources/german_chp.csv
+  H2_retrofit_plants:
+    enable: true
+    year: 2020
+H2_force_retrofit: 2035
 
 pypsa_eur:
   Bus:
