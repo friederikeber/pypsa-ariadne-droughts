@@ -112,6 +112,51 @@ def nuclear_generation_ban(n):
             n.links.drop(links,
                          inplace=True)            
 
+def waste_heat_eff(n, options):
+# Reduce waste heate efficiency for conversion processes
+    # AC buses with district heating
+    urban_central = n.buses.index[n.buses.carrier == "urban central heat"]
+
+    if not urban_central.empty:
+        urban_central = urban_central.str[: -len(" urban central heat")]
+
+        link_carriers = n.links.carrier.unique()
+
+        # TODO what is the 0.95 and should it be a config option?
+        if (
+            options["use_fischer_tropsch_waste_heat"]
+            and "Fischer-Tropsch" in link_carriers
+        ):
+
+            n.links.loc[n.links.carrier=="Fischer-Tropsch"].efficiency3 /=3
+
+        if options["use_methanation_waste_heat"] and "Sabatier" in link_carriers:
+
+            n.links.loc[n.links.carrier=="Sabatier"].efficiency3 /=3
+
+        # DEA quotes 15% of total input (11% of which are high-value heat)
+        if options["use_haber_bosch_waste_heat"] and "Haber-Bosch" in link_carriers:
+
+            n.links.loc[n.links.carrier=="Haber-Bosch"].efficiency3 /=3
+
+        if (
+            options["use_methanolisation_waste_heat"]
+            and "methanolisation" in link_carriers
+        ):
+
+            n.links.loc[n.links.carrier=="methanolisation"].efficiency4 /= 3
+
+        # TODO integrate usable waste heat efficiency into technology-data from DEA
+        if (
+            options.get("use_electrolysis_waste_heat", False)
+            and "H2 Electrolysis" in link_carriers
+        ):
+
+            n.links.loc[n.links.carrier == "H2 Electrolysis"].efficiency2 /= 3
+
+        if options["use_fuel_cell_waste_heat"] and "H2 Fuel Cell" in link_carriers:
+
+            n.links.loc[n.links.carrier == "H2 Fuel Cell"].efficiency2 /= 3
 
 def add_reversed_pipes(df):
     df_rev = df.copy().rename({"bus0": "bus1", "bus1": "bus0"}, axis=1)
@@ -478,6 +523,10 @@ if __name__ == "__main__":
     coal_generation_ban(n)
     
     nuclear_generation_ban(n)
+
+    options = snakemake.params.sector
+    if options["heating"]:
+        waste_heat_eff(n, options)
 
     first_technology_occurrence(n)
 
