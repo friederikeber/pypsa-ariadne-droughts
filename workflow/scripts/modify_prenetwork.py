@@ -112,6 +112,19 @@ def nuclear_generation_ban(n):
             n.links.drop(links,
                          inplace=True)            
 
+def gas_generation_ban(n):
+
+    year = int(snakemake.wildcards.planning_horizons)
+
+    for ct in snakemake.params.gas_ban:
+        ban_year = int(snakemake.params.gas_ban[ct])
+        if ban_year < year:
+            logger.info(f"For year {year} in {ct} implementing gas from {ban_year}")
+            links = n.links.index[(n.links.index.str[:2] == ct) & (n.links.carrier.isin(["CCGT", "OCGT", "urban central gas CHP", "urban central gas CHP CC"]))]
+            logger.info(f"Dropping {links}")
+            n.links.drop(links,
+                         inplace=True)           
+
 def waste_heat_eff(n, options):
 # Reduce waste heate efficiency for conversion processes
     # AC buses with district heating
@@ -523,6 +536,8 @@ if __name__ == "__main__":
     coal_generation_ban(n)
     
     nuclear_generation_ban(n)
+
+    gas_generation_ban(n)
 
     options = snakemake.params.sector
     if options["heating"]:

@@ -155,6 +155,7 @@ rule modify_prenetwork:
         fossil_boiler_ban=config_provider("new_decentral_fossil_boiler_ban"),
         coal_ban=config_provider("coal_generation_ban"),
         nuclear_ban=config_provider("nuclear_generation_ban"),
+        gas_ban=config_provider("gas_generation_ban"),
         planning_horizons=config_provider("scenario", "planning_horizons"),
         H2_transmission_efficiency=config_provider("sector", "transmission_efficiency", "H2 pipeline"),
         H2_retrofit=config_provider("sector", "H2_retrofit"),

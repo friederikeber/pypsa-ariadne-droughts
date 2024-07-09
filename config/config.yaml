@@ -82,7 +82,7 @@ countries: ['AT', 'BE', 'CH', 'CZ', 'DE', 'DK', 'FR', 'GB', 'LU', 'NL', 'NO', 'P
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#enable
 enable:
-  retrieve: false # set to false once initial data is retrieved
+  retrieve: True # set to false once initial data is retrieved
   retrieve_cutout: false # set to false once initial data is retrieved
 clustering:
   # simplify_network:
@@ -233,6 +233,9 @@ coal_generation_ban:
 
 nuclear_generation_ban:
   DE: 2022
+
+gas_generation_ban:
+  DE: 2038
 
 first_technology_occurrence:
   Link:
